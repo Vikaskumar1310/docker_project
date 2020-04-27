@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+          image: postgres
+          restart: always
+          environment:
+            POSTGRES_PASSWORD : 'redhat'
+            POSTGRES_USER: 'vikas'
+            POSTGRES_DB: 'pgdb'
+          volumes:
+            - postgres_data:/var/lib/postgresql/data
+          networks:
+            - postgresql
+
+
+  cloud:
+          image: owncloud
+          restart: always
+          ports:
+            - '80:80'
+          depends_on:
+            - db
+          volumes:
+            - owncloud_data:/var/www/html
+          networks:
+            - postgresql
+
+
+networks:
+        postgresql:
+                driver: bridge
+
+volumes:
+        postgres_data:
+        owncloud_data:
+
